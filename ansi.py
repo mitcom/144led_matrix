@@ -1,8 +1,11 @@
 import contextlib
 import sys
+import termios
 
 _ESC = '\x1b'
 _CSI = f'{_ESC}['
+
+_TERMIOS_LFLAGS_ID = 3  # termios local-mode flags index
 
 def _sgr(parameter):
     return f'{_CSI}{parameter}m'
@@ -47,12 +50,34 @@ def show_cursor():
 def reset():
     sys.stdout.write(_reset_code())
 
+
+class Echo:
+    def __init__(self):
+        self.fd = sys.stdin.fileno()
+        self.original_tty_attributes = termios.tcgetattr(self.fd)
+
+    def switch_off(self):
+        tty_attributes = self.original_tty_attributes[:]
+        tty_attributes[_TERMIOS_LFLAGS_ID] = (
+            tty_attributes[_TERMIOS_LFLAGS_ID] & ~termios.ECHO
+        )
+        termios.tcsetattr(self.fd, termios.TCSADRAIN, tty_attributes)
+
+    def reset(self):
+        termios.tcsetattr(
+            self.fd, termios.TCSADRAIN, self.original_tty_attributes,
+        )
+
+
 @contextlib.contextmanager
 def terminal():
+    echo = Echo()
     try:
         hide_cursor()
+        echo.switch_off()
         yield
     finally:
         write()
         show_cursor()
         reset()
+        echo.reset()
