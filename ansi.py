@@ -2,10 +2,12 @@ import contextlib
 import sys
 import termios
 
+
 _ESC = '\x1b'
 _CSI = f'{_ESC}['
 
 _TERMIOS_LFLAGS_ID = 3  # termios local-mode flags index
+
 
 def _sgr(parameter):
     return f'{_CSI}{parameter}m'

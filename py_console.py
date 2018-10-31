@@ -8,6 +8,7 @@ PIXEL_DOWN = '███ '
 PIXEL_UP= '▄▄▄ '
 # PIXEL = '▄ '
 
+
 with ansi.terminal():
     LINES = 12
     for t in range(100):
