@@ -6,7 +6,7 @@ from ansi import Terminal
 BLACK = 0,0,0
 WHITE = 255, 255, 255
 
-PIXEL = '▄ '
+PIXEL = '██'
 
 
 class Matrix():
@@ -22,7 +22,7 @@ class Matrix():
 
         self._auto_show = auto_show
 
-        self.fill((0,0,0))
+        self.fill(BLACK)
 
     def __create_matrix(self):
         self._matrix = [
