@@ -37,19 +37,24 @@ class Matrix():
     def cells(self):
         return range(self.size_x)
 
+    def _auto_showable(method):
+        def method_wrapper(self, *args, **kwargs):
+            result = method(self, *args, **kwargs)
+            if self._auto_show:
+                self.show()
+            return result
+
+        return method_wrapper
+
+    @_auto_showable
     def fill(self, color):
         for y in self.rows:
             for x in self.cells:
                 self._matrix[x][y] = color
 
-        if self._auto_show:
-            self.show()
-
+    @_auto_showable
     def set_pixel(self, x, y, color):
         self._matrix[x][y] = color
-
-        if self._auto_show:
-            self.show()
 
     def show(self):
         self.terminal.go_to_origin()
