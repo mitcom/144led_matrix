@@ -16,10 +16,6 @@ class Matrix():
 
         self.__create_matrix()
 
-        # this is used for returning to position 0, 0 before drawing every
-        # (without first) frame
-        self._after_first_frame = False
-
         self._auto_show = auto_show
 
         self.fill((0,0,0))
@@ -37,8 +33,8 @@ class Matrix():
 
     def fill(self, color):
         for y in self.__rows():
-                for x in self.__cells():
-                    self._matrix[x][y] = color
+            for x in self.__cells():
+                self._matrix[x][y] = color
 
         if self._auto_show:
             self.show()
@@ -50,16 +46,12 @@ class Matrix():
             self.show()
 
     def show(self):
-        if self._after_first_frame:
-            ansi.move_cursor_up(self.size_y + 1)
-        else:
-            self._after_first_frame = True
-
-        with ansi.terminal():
+        with ansi.terminal() as terminal:
             for y in self.__rows():
-                for x in range (self.size_x):
-                    ansi.write(PIXEL, self._matrix[x][y])
-                ansi.write()
+                for x in self.__cells():
+                    terminal.write(PIXEL, self._matrix[x][y])
+                terminal.break_line()
+            terminal.go_to_origin()
 
 
 if __name__ == '__main__':
