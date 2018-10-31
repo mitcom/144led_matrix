@@ -14,14 +14,14 @@ with ansi.terminal() as terminal:
     for t in range(100):
         terminal.go_to_origin()
         for y in range(LINES):
-            with terminal.line():
+            with terminal.line:
                 for x in range (12):
                     terminal.write(
                         PIXEL_UP,
                         (int(y * 256/12), min(0+t*4, 255), int(x * 256/12)),
                     )
 
-            with terminal.line():
+            with terminal.line:
                 for x in range(12):
                     terminal.write(
                         PIXEL_DOWN,
