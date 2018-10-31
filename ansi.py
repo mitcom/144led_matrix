@@ -94,6 +94,7 @@ class Terminal:
         self.written_lines += text.count(LF) + new_line
         return write(text, *args, new_line, **kwargs)
 
+    @property
     @contextlib.contextmanager
     def line(self):
         try:
