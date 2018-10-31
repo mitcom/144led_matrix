@@ -26,18 +26,20 @@ class Matrix():
 
     def __create_matrix(self):
         self._matrix = [
-            [BLACK] * self.size_y for x in self.__cells()
+            [BLACK] * self.size_y for x in self.cells
         ]
 
-    def __rows(self):
+    @property
+    def rows(self):
         return range(self.size_y)
 
-    def __cells(self):
+    @property
+    def cells(self):
         return range(self.size_x)
 
     def fill(self, color):
-        for y in self.__rows():
-            for x in self.__cells():
+        for y in self.rows:
+            for x in self.cells:
                 self._matrix[x][y] = color
 
         if self._auto_show:
@@ -51,17 +53,15 @@ class Matrix():
 
     def show(self):
         self.terminal.go_to_origin()
-        for y in self.__rows():
+        for y in self.rows:
             with self.terminal.line:
-                for x in self.__cells():
+                for x in self.cells:
                     self.terminal.write(PIXEL, self._matrix[x][y])
 
 
 if __name__ == '__main__':
-    size_x = 4
-    size_y = 3
-    m = Matrix(size_x, size_y, auto_show=True)
-    for y in range(size_y):
-        for x in range(size_x):
+    m = Matrix(4, 4, auto_show=True)
+    for y in m.rows:
+        for x in m.cells:
             m.set_pixel(x, y, WHITE)
             time.sleep(0.05)
