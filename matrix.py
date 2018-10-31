@@ -52,9 +52,9 @@ class Matrix():
     def show(self):
         self.terminal.go_to_origin()
         for y in self.__rows():
-            for x in self.__cells():
-                self.terminal.write(PIXEL, self._matrix[x][y])
-            self.terminal.break_line()
+            with self.terminal.line():
+                for x in self.__cells():
+                    self.terminal.write(PIXEL, self._matrix[x][y])
 
 
 if __name__ == '__main__':

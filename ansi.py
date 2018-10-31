@@ -94,6 +94,13 @@ class Terminal:
         self.written_lines += text.count(LF) + new_line
         return write(text, *args, new_line, **kwargs)
 
+    @contextlib.contextmanager
+    def line(self):
+        try:
+            yield
+        finally:
+            self.break_line()
+
     def break_line(self):
         self.written_lines += 1
         return line_feed()
