@@ -2,7 +2,7 @@ import contextlib
 import sys
 import termios
 
-
+LF = '\n'
 _ESC = '\x1b'
 _CSI = f'{_ESC}['
 
@@ -28,14 +28,13 @@ def _ansi_text(text, color=None, reset=False):
 
     return f'{foreground_color}{text}{reset_sequence}'
 
-def write(text='', color=None, reset=False, new_line=False):
-    if text:
-        ansi_text = _ansi_text(text, color, reset)
-        line_feed = '\n' if new_line else ''
-        sentence = f'{ansi_text}{line_feed}'
-    else:
-        sentence = '\n'
-    sys.stdout.write(f'{sentence}')
+def write(text, color=None, reset=False, new_line=False):
+    ansi_text = _ansi_text(text, color, reset)
+    line_feed = LF if new_line else ''
+    sys.stdout.write(f'{ansi_text}{line_feed}')
+
+def line_feed():
+    sys.stdout.write(LF)
 
 def move_cursor_up(cells_number):
     sentence = f'{_CSI}{cells_number}A'
@@ -71,15 +70,36 @@ class Echo:
         )
 
 
+class Terminal:
+    def __init__(self):
+        self.written_lines = 0
+
+    def write(self, text, *args, new_line=False, **kwargs):
+        self.written_lines += text.count(LF) + new_line
+        return write(text, *args, new_line, **kwargs)
+
+    def break_line(self):
+        self.written_lines += 1
+        return line_feed()
+
+    def go_to_origin(self):
+        if self.written_lines:
+            move_cursor_up(self.written_lines)
+            self.written_lines = 0
+
+
 @contextlib.contextmanager
 def terminal():
     echo = Echo()
+    terminal = Terminal()
+
     try:
         hide_cursor()
         echo.switch_off()
-        yield
+
+        yield terminal
+
     finally:
-        write()
         show_cursor()
         reset()
         echo.reset()
