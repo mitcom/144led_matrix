@@ -1,6 +1,6 @@
 import time
 
-import ansi
+from ansi import Terminal
 
 
 BLACK = 0,0,0
@@ -15,6 +15,10 @@ class Matrix():
         self.size_y = size_y
 
         self.__create_matrix()
+
+        terminal = Terminal()
+        terminal.safe_prepare()
+        self.terminal = terminal
 
         self._auto_show = auto_show
 
@@ -46,12 +50,11 @@ class Matrix():
             self.show()
 
     def show(self):
-        with ansi.terminal() as terminal:
-            for y in self.__rows():
-                for x in self.__cells():
-                    terminal.write(PIXEL, self._matrix[x][y])
-                terminal.break_line()
-            terminal.go_to_origin()
+        self.terminal.go_to_origin()
+        for y in self.__rows():
+            for x in self.__cells():
+                self.terminal.write(PIXEL, self._matrix[x][y])
+            self.terminal.break_line()
 
 
 if __name__ == '__main__':

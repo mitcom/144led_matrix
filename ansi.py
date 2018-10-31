@@ -73,6 +73,22 @@ class Echo:
 class Terminal:
     def __init__(self):
         self.written_lines = 0
+        self.echo = Echo()
+
+    def prepare(self):
+        hide_cursor()
+        self.echo.switch_off()
+
+    def safe_prepare(self):
+        self.prepare()
+
+        import atexit
+        atexit.register(self.cleanup)
+
+    def cleanup(self):
+        show_cursor()
+        reset()
+        self.echo.reset()
 
     def write(self, text, *args, new_line=False, **kwargs):
         self.written_lines += text.count(LF) + new_line
@@ -90,16 +106,10 @@ class Terminal:
 
 @contextlib.contextmanager
 def terminal():
-    echo = Echo()
-    terminal = Terminal()
-
+    t = Terminal()
     try:
-        hide_cursor()
-        echo.switch_off()
-
-        yield terminal
+        t.prepare()
+        yield t
 
     finally:
-        show_cursor()
-        reset()
-        echo.reset()
+        t.cleanup()
