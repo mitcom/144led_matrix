@@ -3,14 +3,14 @@ import time
 from ansi import Terminal
 
 
-BLACK = 0,0,0
+BLACK = 0, 0, 0
 WHITE = 255, 255, 255
 
 PIXEL = '██'
 
 
 class Matrix():
-    def __init__(self, size_x, size_y, auto_show=False):
+    def __init__(self, size_x, size_y, auto_show=False, fill=BLACK):
         self.size_x = size_x
         self.size_y = size_y
 
@@ -22,7 +22,7 @@ class Matrix():
 
         self._auto_show = auto_show
 
-        self.fill(BLACK)
+        self.fill(fill)
 
     def __create_matrix(self):
         self._matrix = [
@@ -65,8 +65,7 @@ class Matrix():
 
 
 if __name__ == '__main__':
-    m = Matrix(4, 4, auto_show=True)
-    for y in m.rows:
-        for x in m.cells:
-            m.set_pixel(x, y, WHITE)
-            time.sleep(0.05)
+    m = Matrix(16, 12, auto_show=True, fill=BLACK)
+
+    from bitmap import read_image
+    m.set_pixels(read_image('./mario.bmp'))
