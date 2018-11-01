@@ -6,10 +6,10 @@ from ansi import Terminal
 BLACK = 0, 0, 0
 WHITE = 255, 255, 255
 
-PIXEL = '██'
-
 
 class Matrix():
+    pixel = '███'
+
     def __init__(self, size_x, size_y, auto_show=False, fill=BLACK):
         self.size_x = size_x
         self.size_y = size_y
@@ -67,9 +67,65 @@ class Matrix():
     def show(self):
         self.terminal.go_to_origin()
         for y in self.rows:
-            with self.terminal.line:
-                for x in self.cells:
-                    self.terminal.write(PIXEL, self._matrix[x][y])
+            self.print_line(y)
+
+    def print_line(self, line):
+        with self.terminal.line:
+            for x in self.cells:
+                self.terminal.write(self.pixel, self._matrix[x][line])
+
+
+class MatrixWithGaps(Matrix):
+    pixel = '▆▆ '
+
+
+class MatrixLargerPixelsWithGaps(Matrix):
+    upper_pixel = '▄▄▄ '
+    lower_pixel = '███ '
+
+    def print_line(self, line):
+        with self.terminal.line:
+            for x in self.cells:
+                self.terminal.write(self.upper_pixel, self._matrix[x][line])
+        with self.terminal.line:
+            for x in self.cells:
+                self.terminal.write(self.lower_pixel, self._matrix[x][line])
+
+
+class MatrixSmallPixelsWithGaps(Matrix):
+    pixel = '▄ '
+
+    def print_line(self, line):
+        with self.terminal.line:
+            for x in self.cells:
+                self.terminal.write(self.pixel, self._matrix[x][line])
+
+
+class MatrixBigPixelsWithGaps(Matrix):
+    pixel = '████  '
+
+    def print_line(self, line):
+        t = self.terminal
+        with t.line:
+            for x in self.cells:
+                t.write(self.pixel, self._matrix[x][line])
+        with t.line:
+            for x in self.cells:
+                t.write(self.pixel, self._matrix[x][line])
+        self.terminal.break_line()
+
+
+class MatrixBigPixels(Matrix):
+    pixel = '████'
+
+    def print_line(self, line):
+        t = self.terminal
+        with t.line:
+            for x in self.cells:
+                t.write(self.pixel, self._matrix[x][line])
+        with t.line:
+            for x in self.cells:
+                t.write(self.pixel, self._matrix[x][line])
 
 
 if __name__ == '__main__':
