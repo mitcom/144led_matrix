@@ -37,7 +37,7 @@ class Matrix():
     def cells(self):
         return range(self.size_x)
 
-    def _auto_showable(method):
+    def _showable(method):
         def method_wrapper(self, *args, **kwargs):
             result = method(self, *args, **kwargs)
             if self._auto_show:
@@ -46,15 +46,23 @@ class Matrix():
 
         return method_wrapper
 
-    @_auto_showable
+    @_showable
     def fill(self, color):
         for y in self.rows:
             for x in self.cells:
                 self._matrix[x][y] = color
 
-    @_auto_showable
+    @_showable
     def set_pixel(self, x, y, color):
         self._matrix[x][y] = color
+
+    @_showable
+    def set_pixels(self, pixels):
+        for y, rows in enumerate(pixels):
+            if y < self.size_y:
+                for x, pixel in enumerate(rows):
+                    if x < self.size_x:
+                        self._matrix[x][y] = pixel
 
     def show(self):
         self.terminal.go_to_origin()
