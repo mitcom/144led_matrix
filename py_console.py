@@ -5,7 +5,7 @@ import ansi
 
 # PIXEL = '████  '
 PIXEL_DOWN = '███ '
-PIXEL_UP= '▄▄▄ '
+PIXEL_UP = '▄▄▄ '
 # PIXEL = '▄ '
 
 

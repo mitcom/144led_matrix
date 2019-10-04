@@ -3,7 +3,7 @@ import sys
 import termios
 
 LF = '\n'
-_ESC = '\x1b'
+_ESC = '\x1b' # equivalents to \033, \27
 _CSI = f'{_ESC}['
 
 _TERMIOS_LFLAGS_ID = 3  # termios local-mode flags index
