@@ -7,8 +7,8 @@ BLACK = 0, 0, 0
 WHITE = 255, 255, 255
 
 
-class Matrix():
-    pixel = '███'
+class Matrix:
+    pixel = "███"
 
     def __init__(self, size_x, size_y, auto_show=False, fill=BLACK):
         self.size_x = size_x
@@ -25,9 +25,7 @@ class Matrix():
         self.fill(fill)
 
     def __create_matrix(self):
-        self._matrix = [
-            [BLACK] * self.size_y for x in self.cells
-        ]
+        self._matrix = [[BLACK] * self.size_y for x in self.cells]
 
     @property
     def rows(self):
@@ -68,6 +66,7 @@ class Matrix():
         self.terminal.go_to_origin()
         for y in self.rows:
             self.print_line(y)
+        self.terminal.cleanup()
 
     def print_line(self, line):
         with self.terminal.line:
@@ -75,14 +74,7 @@ class Matrix():
                 self.terminal.write(self.pixel, self._matrix[x][line])
 
 
-class MatrixWithGaps(Matrix):
-    pixel = '▆▆ '
-
-
-class MatrixLargerPixelsWithGaps(Matrix):
-    upper_pixel = '▄▄▄ '
-    lower_pixel = '███ '
-
+class PrintTwoLinesMixin:
     def print_line(self, line):
         with self.terminal.line:
             for x in self.cells:
@@ -92,44 +84,26 @@ class MatrixLargerPixelsWithGaps(Matrix):
                 self.terminal.write(self.lower_pixel, self._matrix[x][line])
 
 
-class MatrixSmallPixelsWithGaps(Matrix):
-    pixel = '▄ '
+class MatrixWithGaps(Matrix):
+    pixel = "▆▆ "
 
-    def print_line(self, line):
-        with self.terminal.line:
-            for x in self.cells:
-                self.terminal.write(self.pixel, self._matrix[x][line])
+
+class MatrixLargerPixelsWithGaps(Matrix, PrintTwoLinesMixin):
+    upper_pixel = "▄▄▄ "
+    lower_pixel = "███ "
+
+
+class MatrixSmallPixelsWithGaps(Matrix):
+    pixel = "▄ "
 
 
 class MatrixBigPixelsWithGaps(Matrix):
-    pixel = '████  '
+    pixel = "████  "
 
     def print_line(self, line):
-        t = self.terminal
-        with t.line:
-            for x in self.cells:
-                t.write(self.pixel, self._matrix[x][line])
-        with t.line:
-            for x in self.cells:
-                t.write(self.pixel, self._matrix[x][line])
+        super().print_line(line)
         self.terminal.break_line()
 
 
-class MatrixBigPixels(Matrix):
-    pixel = '████'
-
-    def print_line(self, line):
-        t = self.terminal
-        with t.line:
-            for x in self.cells:
-                t.write(self.pixel, self._matrix[x][line])
-        with t.line:
-            for x in self.cells:
-                t.write(self.pixel, self._matrix[x][line])
-
-
-if __name__ == '__main__':
-    m = Matrix(16, 12, auto_show=True, fill=BLACK)
-
-    from bitmap import read_image
-    m.set_pixels(read_image('./mario.bmp'))
+class MatrixBigPixels(Matrix, PrintTwoLinesMixin):
+    pixel = "████"
