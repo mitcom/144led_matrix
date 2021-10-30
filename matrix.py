@@ -107,11 +107,3 @@ class MatrixBigPixelsWithGaps(Matrix):
 
 class MatrixBigPixels(Matrix, PrintTwoLinesMixin):
     pixel = "████"
-
-
-if __name__ == "__main__":
-    m = Matrix(16, 12, auto_show=True, fill=BLACK)
-
-    from bitmap import read_image
-
-    m.set_pixels(read_image("./mario.bmp"))
