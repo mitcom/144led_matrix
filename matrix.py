@@ -74,14 +74,7 @@ class Matrix:
                 self.terminal.write(self.pixel, self._matrix[x][line])
 
 
-class MatrixWithGaps(Matrix):
-    pixel = "▆▆ "
-
-
-class MatrixLargerPixelsWithGaps(Matrix):
-    upper_pixel = "▄▄▄ "
-    lower_pixel = "███ "
-
+class PrintTwoLinesMixin:
     def print_line(self, line):
         with self.terminal.line:
             for x in self.cells:
@@ -91,40 +84,29 @@ class MatrixLargerPixelsWithGaps(Matrix):
                 self.terminal.write(self.lower_pixel, self._matrix[x][line])
 
 
+class MatrixWithGaps(Matrix):
+    pixel = "▆▆ "
+
+
+class MatrixLargerPixelsWithGaps(Matrix, PrintTwoLinesMixin):
+    upper_pixel = "▄▄▄ "
+    lower_pixel = "███ "
+
+
 class MatrixSmallPixelsWithGaps(Matrix):
     pixel = "▄ "
-
-    def print_line(self, line):
-        with self.terminal.line:
-            for x in self.cells:
-                self.terminal.write(self.pixel, self._matrix[x][line])
 
 
 class MatrixBigPixelsWithGaps(Matrix):
     pixel = "████  "
 
     def print_line(self, line):
-        t = self.terminal
-        with t.line:
-            for x in self.cells:
-                t.write(self.pixel, self._matrix[x][line])
-        with t.line:
-            for x in self.cells:
-                t.write(self.pixel, self._matrix[x][line])
+        super().print_line(line)
         self.terminal.break_line()
 
 
-class MatrixBigPixels(Matrix):
+class MatrixBigPixels(Matrix, PrintTwoLinesMixin):
     pixel = "████"
-
-    def print_line(self, line):
-        t = self.terminal
-        with t.line:
-            for x in self.cells:
-                t.write(self.pixel, self._matrix[x][line])
-        with t.line:
-            for x in self.cells:
-                t.write(self.pixel, self._matrix[x][line])
 
 
 if __name__ == "__main__":
