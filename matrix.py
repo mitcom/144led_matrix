@@ -66,6 +66,7 @@ class Matrix:
         self.terminal.go_to_origin()
         for y in self.rows:
             self.print_line(y)
+        self.terminal.cleanup()
 
     def print_line(self, line):
         with self.terminal.line:
