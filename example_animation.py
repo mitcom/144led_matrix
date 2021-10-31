@@ -4,8 +4,8 @@ import ansi
 
 
 # PIXEL = '████  '
-PIXEL_DOWN = '███ '
-PIXEL_UP= '▄▄▄ '
+PIXEL_DOWN = "███ "
+PIXEL_UP = "▄▄▄ "
 # PIXEL = '▄ '
 
 
@@ -15,16 +15,16 @@ with ansi.terminal() as terminal:
         terminal.go_to_origin()
         for y in range(LINES):
             with terminal.line:
-                for x in range (12):
+                for x in range(12):
                     terminal.write(
                         PIXEL_UP,
-                        (int(y * 256/12), min(0+t*4, 255), int(x * 256/12)),
+                        (int(y * 256 / 12), min(0 + t * 4, 255), int(x * 256 / 12)),
                     )
 
             with terminal.line:
                 for x in range(12):
                     terminal.write(
                         PIXEL_DOWN,
-                        (int(y * 256/12), min(0+t*4, 255), int(x * 256/12)),
+                        (int(y * 256 / 12), min(0 + t * 4, 255), int(x * 256 / 12)),
                     )
         time.sleep(0.05)
